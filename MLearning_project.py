@@ -298,15 +298,15 @@ xgboost_metrics = [accuracy_xgb, precision_xgb, recall_xgb, f1_xgb, f2_roc]
 figure, axis = plt.subplots(1, 2, figsize=(10, 8))
 figure.suptitle("Comparison of Evaluation Metrics", fontsize=16)
 
-axis[1, 0].bar(titles, random_forest_metrics, color='blue', width=0.4)
-axis[1, 0].set_title("Random Forest", fontsize=12)
-axis[1, 0].set_xlabel('Evaluation Metrics', fontsize=10)
-axis[1, 0].set_ylabel('Values', fontsize=10)
+axis[0, 0].bar(titles, random_forest_metrics, color='blue', width=0.4)
+axis[0, 0].set_title("Random Forest", fontsize=12)
+axis[0, 0].set_xlabel('Evaluation Metrics', fontsize=10)
+axis[0, 0].set_ylabel('Values', fontsize=10)
 
-axis[1, 1].bar(titles, xgboost_metrics, color='purple', width=0.4)
-axis[1, 1].set_title("XGBoost", fontsize=12)
-axis[1, 1].set_xlabel('Evaluation Metrics', fontsize=10)
-axis[1, 1].set_ylabel('Values', fontsize=10)
+axis[0, 1].bar(titles, xgboost_metrics, color='purple', width=0.4)
+axis[0, 1].set_title("XGBoost", fontsize=12)
+axis[0, 1].set_xlabel('Evaluation Metrics', fontsize=10)
+axis[0, 1].set_ylabel('Values', fontsize=10)
 
 plt.tight_layout()
 plt.show()
