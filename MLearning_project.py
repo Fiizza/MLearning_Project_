@@ -19,6 +19,7 @@ y=df_defaults['default.payment.next.month']
 
 Scaler=StandardScaler()
 X_Scaled=Scaler.fit_transform(X)
+X_test = scaler.transform(X_test)
 
 Pca=PCA(0.95)
 X_Pca=Pca.fit_transform(X_Scaled)
@@ -29,6 +30,7 @@ X_train,X_test,y_train,y_test=train_test_split(X_Pca,y,random_state=42)
 Smote=SMOTE(sampling_strategy='auto',random_state=42)
 X_train_sm,y_train_sm=Smote.fit_resample(X_train,y_train)
 print(y_train_sm.value_counts())
+
 Start_time=time.perf_counter()
 light_gbm=lightgbm.LGBMClassifier(random_state=42)
 light_gbm.fit(X_train_sm,y_train_sm)
@@ -139,5 +141,173 @@ print("Confusion Matrix: ")
 print(confusionMatrix_SVM)
 Display_Svm_ConfMatrix=ConfusionMatrixDisplay(confusion_matrix=confusionMatrix_SVM, display_labels=df_defaults['default.payment.next.month'].unique())
 Display_Svm_ConfMatrix.plot()
+plt.show()
+
+#Random Forest
+
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+
+model = clf.fit(X_train_sm, y_train_sm)
+
+y_pred = clf.predict(X_test)
+accuracy = model.score(X_test, y_pred)
+print("Accuracy with default parameters:", accuracy)
+
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+parameter_grid = {
+    'n_estimators': [100, 150],      
+    'max_depth': [10, 15],             
+    'min_samples_split': [2, 5],       
+    'min_samples_leaf': [1, 2],         
+    'max_features': ['sqrt', 'log2'],      
+    'bootstrap': [True, False]             
+}
+
+Rf = RandomForestClassifier()
+
+#using random search
+random_search = RandomizedSearchCV(Rf, param_distributions= parameter_grid, n_iter=10, cv=2, scoring='accuracy', verbose=2)
+random_search.fit(X_train_sm, y_train_sm)
+
+print("Best Parameters:", random_search.best_params_)
+print("Best Score:", random_search.best_score_)
+
+y_pred_tuned = random_search.predict(X_test)
+
+print("Classification Report:")
+print(classification_report(y_test, y_pred_tuned))
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred_tuned))
+
+#using grid search
+grid_search = GridSearchCV(estimator= Rf, param_grid=parameter_grid, scoring='accuracy', cv = 3, verbose=2) 
+grid_search.fit(X_train_sm, y_train_sm) 
+
+print("Best Parameters:", grid_search.best_params_)
+print("Best Score:", grid_search.best_score_)
+
+y_pred_tuned = grid_search.predict(X_test)
+
+print("Classification Report:")
+print(classification_report(y_test, y_pred_tuned))
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred_tuned))
+
+conf_matrix = confusion_matrix(y_test, y_pred_tuned)
+disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels= df ['default.payment.next.month'].unique())
+disp.plot()
+plt.show()
+
+roc_auc = roc_auc_score(y_test, y_pred_tuned)
+print(f"ROC AUC: {roc_auc}")
+
+
+rf_report = classification_report(y_test, y_pred_tuned, output_dict=True)
+accuracy_rf = rf_report['accuracy']
+precision_rf = rf_report['macro avg']['precision']
+recall_rf = rf_report['macro avg']['recall']
+f1_rf = rf_report['macro avg']['f1-score']
+f1_roc = roc_auc
+
+#XgBoost
+
+xgb = XGBClassifier( random_state = 42)
+model = xgb.fit(X_train, y_train)
+
+y_pred = xgb.predict(X_test)
+accuracy = model.score(X_test, y_pred)
+print("Accuracy with default parameters:", accuracy)
+
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+roc_auc = roc_auc_score(y_test, y_pred_tuned)
+print(f"ROC AUC: {roc_auc}")
+
+parameter_grid = {
+    'learning_rate': [0.01, 0.05, 1],      
+    'n_estimators': [100, 150, 200],          
+    'max_depth': [5, 6, 7, 8],                
+    'subsample': [0.6, 0.7, 0.8],              
+    'colsample_bytree': [0.6, 0.7, 0.8]                           
+}
+
+#using random search
+random_search = RandomizedSearchCV(xgb, param_distributions= parameter_grid, n_iter=20, cv=2, scoring='accuracy', verbose=2, n_jobs=-1 )
+random_search.fit(X_train_sm, y_train_sm)
+
+print("Best Parameters:", random_search.best_params_)
+print("Best Score:", random_search.best_score_)
+
+y_pred_tuned = random_search.predict(X_test)
+
+print("Classification Report:")
+print(classification_report(y_test, y_pred_tuned))
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred_tuned))
+
+roc_auc = roc_auc_score(y_test, y_pred_tuned)
+print(f"ROC AUC: {roc_auc}")
+
+#using grid search
+
+grid_search = GridSearchCV(estimator= xgb, param_grid=parameter_grid, scoring='accuracy', cv = 3, verbose=2) 
+grid_search.fit(X_train_sm, y_train_sm) 
+
+print("Best Parameters:", grid_search.best_params_)
+print("Best Score:", grid_search.best_score_)
+
+y_pred_tuned = grid_search.predict(X_test)
+
+print("Classification Report:")
+print(classification_report(y_test, y_pred_tuned))
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred_tuned))
+
+conf_matrix = confusion_matrix(y_test, y_pred_tuned)
+disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels= df ['default.payment.next.month'].unique())
+disp.plot()
+plt.show()
+
+roc_auc = roc_auc_score(y_test, y_pred_tuned)
+print(f"ROC AUC: {roc_auc}")
+
+xgb_report = classification_report(y_test, y_pred_tuned, output_dict=True)
+accuracy_xgb = xgb_report['accuracy']
+precision_xgb = xgb_report['macro avg']['precision']
+recall_xgb = xgb_report['macro avg']['recall']
+f1_xgb = xgb_report['macro avg']['f1-score']
+f2_roc = roc_auc
+
+titles = ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'ROC-AUC']
+random_forest_metrics = [accuracy_rf, precision_rf, recall_rf, f1_rf, f1_roc ]
+xgboost_metrics = [accuracy_xgb, precision_xgb, recall_xgb, f1_xgb, f2_roc]
+
+figure, axis = plt.subplots(2, 2, figsize=(10, 8))
+figure.suptitle("Comparison of Evaluation Metrics", fontsize=16)
+
+axis[1, 0].bar(titles, random_forest_metrics, color='blue', width=0.4)
+axis[1, 0].set_title("Random Forest", fontsize=12)
+axis[1, 0].set_xlabel('Evaluation Metrics', fontsize=10)
+axis[1, 0].set_ylabel('Values', fontsize=10)
+
+axis[1, 1].bar(titles, xgboost_metrics, color='purple', width=0.4)
+axis[1, 1].set_title("XGBoost", fontsize=12)
+axis[1, 1].set_xlabel('Evaluation Metrics', fontsize=10)
+axis[1, 1].set_ylabel('Values', fontsize=10)
+
+plt.tight_layout()
 plt.show()
 
