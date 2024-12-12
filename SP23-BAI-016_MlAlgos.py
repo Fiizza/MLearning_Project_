@@ -4,8 +4,6 @@ import time
 import lightgbm 
 from sklearn.model_selection import train_test_split,GridSearchCV, RandomizedSearchCV
 from sklearn.svm import SVC
-import xgboost as xgb
-from xgboost import XGBClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from imblearn.over_sampling import SMOTE
