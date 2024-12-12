@@ -22,13 +22,14 @@ y=df_defaults['default.payment.next.month']
 
 Scaler=StandardScaler()
 X_Scaled=Scaler.fit_transform(X)
-X_test = scaler.transform(X_test)
 
 Pca=PCA(0.95)
 X_Pca=Pca.fit_transform(X_Scaled)
 print("Principal Components Shape: ", X_Pca.shape)
 
 X_train,X_test,y_train,y_test=train_test_split(X_Pca,y,random_state=42)
+
+X_test = scaler.transform(X_test)
 
 Smote=SMOTE(sampling_strategy='auto',random_state=42)
 X_train_sm,y_train_sm=Smote.fit_resample(X_train,y_train)
