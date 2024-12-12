@@ -20,15 +20,14 @@ print(df_defaults.info())
 X=df_defaults.loc[:,df_defaults.columns!='default.payment.next.month']
 y=df_defaults['default.payment.next.month']
 
-Scaler=StandardScaler()
-X_Scaled=Scaler.fit_transform(X)
+X_train,X_test,y_train,y_test=train_test_split(X,y,random_state=42)
 
 Pca=PCA(0.95)
-X_Pca=Pca.fit_transform(X_Scaled)
+X_Pca=Pca.fit_transform(X_train,X_test)
 print("Principal Components Shape: ", X_Pca.shape)
 
-X_train,X_test,y_train,y_test=train_test_split(X_Pca,y,random_state=42)
-
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 Smote=SMOTE(sampling_strategy='auto',random_state=42)
