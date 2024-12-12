@@ -122,7 +122,7 @@ Titles=['Accuracy','Precision','Recall','F1-Score']
 lightgbm_metrics=[Accuracy,Precision,Recall,F1_Score]
 Svm_metrics=[Accuracy_,Precision_,Recall_,F1_Score_]
  
-figure, axis=plt.subplots(2,2, figsize=(8,8))
+figure, axis=plt.subplots(1,2, figsize=(8,8))
 figure.suptitle("Comparison of Evaluation metrics for Different Algorithms", fontsize=10)
 axis[0,0].bar(Titles,lightgbm_metrics,color='Blue', width=0.3)
 axis[0,0].set_title("LightGbm",fontsize=7)
