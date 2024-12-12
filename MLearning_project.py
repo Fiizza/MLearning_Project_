@@ -4,10 +4,13 @@ import time
 import lightgbm 
 from sklearn.model_selection import train_test_split,GridSearchCV, RandomizedSearchCV
 from sklearn.svm import SVC
+from sklearn.ensemble import RandomForestClassifier
+import xgboost as xgb
+from xgboost import XGBClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from imblearn.over_sampling import SMOTE
-from sklearn.metrics import classification_report,confusion_matrix,f1_score,precision_score,recall_score,accuracy_score,ConfusionMatrixDisplay
+from sklearn.metrics import classification_report,confusion_matrix,f1_score,precision_score,recall_score,accuracy_score,ConfusionMatrixDisplay, roc_auc_score
 #DataSet: "Defaults of Credit Card Clients."
 df_defaults=pd.read_csv("D:\\ML_Default_of_CreditCard_Clients\\Dataset_\\UCI_Credit_Card.csv")
 print(df_defaults)
