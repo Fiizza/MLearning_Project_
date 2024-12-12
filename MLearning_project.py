@@ -11,6 +11,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from imblearn.over_sampling import SMOTE
 from sklearn.metrics import classification_report,confusion_matrix,f1_score,precision_score,recall_score,accuracy_score,ConfusionMatrixDisplay, roc_auc_score
+
 #DataSet: "Defaults of Credit Card Clients."
 df_defaults=pd.read_csv("D:\\ML_Default_of_CreditCard_Clients\\Dataset_\\UCI_Credit_Card.csv")
 print(df_defaults)
@@ -48,6 +49,7 @@ param_grid={
     'num_leaves':[31,35,40],
     'force_col_wise':[True]
 }
+
 RandomizedSearch=RandomizedSearchCV(light_gbm,param_grid,cv=10,verbose=3,n_iter=10)
 RandomizedSearch.fit(X_train_sm,y_train_sm)
 print("Best Parameters for LightGBM: ", RandomizedSearch.best_params_)
@@ -56,6 +58,7 @@ Best_Predictions_Rand=best_model_.predict(X_test)
 clr=classification_report(y_test,Best_Predictions_Rand)
 print("Classification Report: ")
 print(clr)
+
 GridSearch=GridSearchCV(light_gbm,param_grid,cv=10,verbose=2)
 GridSearch.fit(X_train_sm,y_train_sm)
 print("Best Parameters for LightGBM: ", GridSearch.best_params_)
@@ -64,6 +67,7 @@ Best_Predictions=best_model_.predict(X_test)
 clr=classification_report(y_test,Best_Predictions)
 print("Classification Report: ")
 print(clr)
+
 Accuracy=accuracy_score(y_test,Best_Predictions)
 print("Accuracy: ",Accuracy)
 Precision=precision_score(y_test,Best_Predictions,average='weighted')
@@ -89,6 +93,7 @@ param_grid={
     'gamma':['scale','auto',0.01,0.1,1.0],
     'degree':[2,3,4,5]
 }
+
 RandomizedSearch_=RandomizedSearchCV(SVm,param_grid,cv=3,verbose=3,n_iter=2)
 RandomizedSearch_.fit(X_train_sm,y_train_sm)
 print("Best Parameters for SVM: ", RandomizedSearch_.best_params_)
@@ -97,6 +102,7 @@ Best_predictions_=best_model.predict(X_test)
 clr=classification_report(y_test,Best_predictions_)
 print("Classification Report: ")
 print(clr)
+
 Accuracy_=accuracy_score(y_test,Best_Predictions)
 print("Accuracy: ",Accuracy_)
 Precision_=precision_score(y_test,Best_predictions_,average='weighted')
@@ -108,6 +114,7 @@ print("F1-Score: ",F1_Score_)
 End_time_=time.perf_counter()
 Elapsed_time_=End_time_-Start_time_
 print("Exectution time for SVM: ",(Elapsed_time_),'secs'  )
+
 GridSearch_=GridSearchCV(SVm,param_grid,cv=2,verbose=3,)
 GridSearch_.fit(X_train_sm,y_train_sm)
 print("Best Parameters for SVM: ", GridSearch_.best_params_)
@@ -120,6 +127,7 @@ print(clr)
 Titles=['Accuracy','Precision','Recall','F1-Score']
 lightgbm_metrics=[Accuracy,Precision,Recall,F1_Score]
 Svm_metrics=[Accuracy_,Precision_,Recall_,F1_Score_] 
+
 figure, axis=plt.subplots(1,2, figsize=(8,8))
 figure.suptitle("Comparison of Evaluation metrics for Different Algorithms", fontsize=10)
 axis[0,0].bar(Titles,lightgbm_metrics,color='Blue', width=0.3)
@@ -139,6 +147,7 @@ print(confusionMatrix_LightGbm)
 Display_LightGbm_ConfMatrix=ConfusionMatrixDisplay(confusion_matrix=confusionMatrix_LightGbm, display_labels=df_defaults['default.payment.next.month'].unique())
 Display_LightGbm_ConfMatrix.plot()
 plt.show()
+
 confusionMatrix_SVM=confusion_matrix(y_test,Best_predictions_)
 print("Confusion Matrix: ")
 print(confusionMatrix_SVM)
