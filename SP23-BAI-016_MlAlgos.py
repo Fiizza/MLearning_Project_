@@ -10,7 +10,9 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from imblearn.over_sampling import SMOTE
 from sklearn.metrics import classification_report,confusion_matrix,f1_score,precision_score,recall_score,accuracy_score,ConfusionMatrixDisplay
+
 #DataSet: "Defaults of Credit Card Clients."
+
 df_defaults=pd.read_csv("D:\\ML_Project\\Dataset\\UCI_Credit_Card.csv")
 print(df_defaults)
 print(df_defaults['default.payment.next.month'].value_counts())
@@ -109,7 +111,14 @@ End_time_=time.perf_counter()
 Elapsed_time_=End_time_-Start_time_
 print("Exectution time for SVM: ",(Elapsed_time_),'secs'  )
 
-
+GridSearch_=GridSearchCV(SVm,param_grid,cv=2,verbose=3)
+GridSearch_.fit(X_train_sm,y_train_sm)
+print("Best Parameters for SVM: ", GridSearch_.best_params_)
+best_model=GridSearch_.best_estimator_
+Best_predictions_Gr=best_model.predict(X_test)
+clr=classification_report(y_test,Best_predictions_Gr)
+print("Classification Report: ")
+print(clr)
 
 Titles=['Accuracy','Precision','Recall','F1-Score']
 lightgbm_metrics=[Accuracy,Precision,Recall,F1_Score]
