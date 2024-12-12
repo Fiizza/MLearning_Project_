@@ -59,7 +59,7 @@ parameter_grid = {
 
 Rf = RandomForestClassifier()
 
-#using random search
+#Random Forest using random search
 random_search = RandomizedSearchCV(Rf, param_distributions= parameter_grid, n_iter=10, cv=3, scoring='accuracy', verbose=2)
 random_search.fit(X_train_smote, y_train_smote)
 
@@ -85,7 +85,7 @@ disp = ConfusionMatrixDisplay(confusion_matrix=conf_matrix, display_labels= df [
 disp.plot()
 plt.show()
 
-#using grid search
+#Random Forest using grid search
 grid_search = GridSearchCV(estimator= Rf, param_grid=parameter_grid, scoring='accuracy', cv = 3) 
 grid_search.fit(X_train_scaled, y_train_smote) 
 
@@ -115,7 +115,7 @@ print(classification_report(y_test, y_pred))
 print("Confusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
 
-#XGBoost Forest with preprocessing and optimisation
+#XGBoost with preprocessing and optimisation
 
 parameter_grid = {
     'learning_rate': [0.1, 0.5, 0.7],      
