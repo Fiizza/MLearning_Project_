@@ -44,7 +44,7 @@ param_grid={
     'objective':['binary'],
     'metric':['binary_error','logloss'],
     'num_leaves':[31,35,40],
-    'force_col_wise':[True]
+    'force_row_wise':[True,False]
 }
 RandomizedSearch=RandomizedSearchCV(light_gbm,param_grid,cv=10,verbose=3,n_iter=10)
 RandomizedSearch.fit(X_train_sm,y_train_sm)
