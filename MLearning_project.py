@@ -117,7 +117,7 @@ print(clr)
 Titles=['Accuracy','Precision','Recall','F1-Score']
 lightgbm_metrics=[Accuracy,Precision,Recall,F1_Score]
 Svm_metrics=[Accuracy_,Precision_,Recall_,F1_Score_] 
-figure, axis=plt.subplots(2,2, figsize=(8,8))
+figure, axis=plt.subplots(1,2, figsize=(8,8))
 figure.suptitle("Comparison of Evaluation metrics for Different Algorithms", fontsize=10)
 axis[0,0].bar(Titles,lightgbm_metrics,color='Blue', width=0.3)
 axis[0,0].set_title("LightGbm",fontsize=7)
@@ -295,7 +295,7 @@ titles = ['Accuracy', 'Precision', 'Recall', 'F1-Score', 'ROC-AUC']
 random_forest_metrics = [accuracy_rf, precision_rf, recall_rf, f1_rf, f1_roc ]
 xgboost_metrics = [accuracy_xgb, precision_xgb, recall_xgb, f1_xgb, f2_roc]
 
-figure, axis = plt.subplots(2, 2, figsize=(10, 8))
+figure, axis = plt.subplots(1, 2, figsize=(10, 8))
 figure.suptitle("Comparison of Evaluation Metrics", fontsize=16)
 
 axis[1, 0].bar(titles, random_forest_metrics, color='blue', width=0.4)
