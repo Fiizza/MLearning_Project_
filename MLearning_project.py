@@ -23,10 +23,6 @@ y=df_defaults['default.payment.next.month']
 
 X_train,X_test,y_train,y_test=train_test_split(X,y,random_state=42)
 
-Pca=PCA(0.95)
-X_Pca=Pca.fit_transform(X_train,X_test)
-print("Principal Components Shape: ", X_Pca.shape)
-
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
